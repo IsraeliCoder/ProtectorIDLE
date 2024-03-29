@@ -10,17 +10,50 @@ public enum Tile
     eEnd
 }
 
+public enum PracticalTile
+{ 
+    eCorner,
+    eFrame,
+    eStartingLocation,
+    eEndLocation,
+    eWalking,
+    eWalkingCorner,
+    eBlock
+}
+
+public class ParticalTileMeta
+{
+    
+    public PracticalTile tileType;
+    public Vector3 rotation;
+
+    public ParticalTileMeta(PracticalTile tileType, Vector3 rotation)
+    {
+        this.tileType = tileType;
+        this.rotation = rotation;
+    }
+
+    public ParticalTileMeta(PracticalTile tileType, float y = 0) : this(tileType, new Vector3(0, y, 0))
+    {
+    }
+
+}
+
 public class FloorStorage : MonoBehaviour
 {
 
     // call as a static variable 
     // singleton like implementation
-    public static GameObject StartTile;
-    public static GameObject WalkTile;
-    public static GameObject BlockTile;
-    public static GameObject EndTile;
 
-    public static Dictionary<Tile, GameObject> TileEnumToTileObject;
+    public static GameObject CornerTile;
+    public static GameObject FrameTile;
+    public static GameObject StartLocationTile;
+    public static GameObject EndLocationTile;
+    public static GameObject WalkingTile;
+    public static GameObject WalkingCornerTile;
+    public static GameObject BlockTile;
+
+    public static Dictionary<PracticalTile, GameObject> TileEnumToTileObject;
     
     // signleton like implementation 
     // only one instance and Start functiction runs only once
@@ -43,25 +76,34 @@ public class FloorStorage : MonoBehaviour
         return FloorStorageRef;
     }
 
-    public GameObject StartTileRef;
-    public GameObject WalkTileRef;
+    public GameObject CornerTileRef;
+    public GameObject FrameTileRef;
+    public GameObject StartLocationTileRef;
+    public GameObject EndLocationTileRef;
+    public GameObject WalkingTileRef;
+    public GameObject WalkingCornerTileRef;
     public GameObject BlockTileRef;
-    public GameObject EndTileRef;
 
     public void Awake()
     {
         
         FloorStorageRef = this;
-        StartTile = StartTileRef;
-        WalkTile = WalkTileRef;
+        CornerTile = CornerTileRef;
+        FrameTile = FrameTileRef;
+        StartLocationTile = StartLocationTileRef;
+        EndLocationTile = EndLocationTileRef;
+        WalkingTile = WalkingTileRef;
+        WalkingCornerTile = WalkingCornerTileRef;
         BlockTile = BlockTileRef;
-        EndTile = EndTileRef;
 
-        TileEnumToTileObject = new Dictionary<Tile, GameObject>();
-        TileEnumToTileObject[Tile.eStart] = StartTile;
-        TileEnumToTileObject[Tile.eBlock] = BlockTile;
-        TileEnumToTileObject[Tile.eWalk] = WalkTile;
-        TileEnumToTileObject[Tile.eEnd] = EndTile;
+        TileEnumToTileObject = new Dictionary<PracticalTile, GameObject>();
+        TileEnumToTileObject[PracticalTile.eCorner] = CornerTileRef;
+        TileEnumToTileObject[PracticalTile.eEndLocation] = EndLocationTileRef;
+        TileEnumToTileObject[PracticalTile.eFrame] = FrameTileRef;
+        TileEnumToTileObject[PracticalTile.eStartingLocation] = StartLocationTileRef;
+        TileEnumToTileObject[PracticalTile.eWalking] = WalkingTileRef;
+        TileEnumToTileObject[PracticalTile.eWalkingCorner] = WalkingCornerTileRef;
+        TileEnumToTileObject[PracticalTile.eBlock] = BlockTileRef;
 
         Levels.Add(FirstLevel);
 

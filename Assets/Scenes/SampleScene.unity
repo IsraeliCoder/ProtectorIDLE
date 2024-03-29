@@ -246,10 +246,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c91a1bb695ed1ad479602280f0b269a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartTileRef: {fileID: 782195468616207033, guid: b924dce73e13fbd46b06d493f10d4ad7, type: 3}
-  WalkTileRef: {fileID: 6885224428041320919, guid: f3d572f4ed602b646bcd16fa874528cb, type: 3}
+  CornerTileRef: {fileID: 6852789893201058033, guid: 989cb3a038b5e8a418f4c15ab40e8e08, type: 3}
+  FrameTileRef: {fileID: 2900768042314010033, guid: 7459861c1d37ea34b87a556f5a00d8b2, type: 3}
+  StartLocationTileRef: {fileID: 154111550685783057, guid: 2f063d1731a14f24eb3d35f5ad829dc1, type: 3}
+  EndLocationTileRef: {fileID: 154111550685783057, guid: 2f063d1731a14f24eb3d35f5ad829dc1, type: 3}
+  WalkingTileRef: {fileID: 8235233857279082801, guid: 341e51ffcacc4a3419e517763508953d, type: 3}
+  WalkingCornerTileRef: {fileID: 4639806415375766114, guid: 040d94d054ec7e24ab107208a252541c, type: 3}
   BlockTileRef: {fileID: 3622670526511579328, guid: 60d65e4eed2ca444d9a5224665294248, type: 3}
-  EndTileRef: {fileID: 782195468616207033, guid: b924dce73e13fbd46b06d493f10d4ad7, type: 3}
 --- !u!114 &705507998
 MonoBehaviour:
   m_ObjectHideFlags: 0

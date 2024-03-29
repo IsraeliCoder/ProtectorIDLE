@@ -18,15 +18,152 @@ public class FloorCreator : MonoBehaviour
         PropsInitiates = null;
     }
 
+    private void locateNeighboursSetIndexes(ref int indexToReturn1, ref int indexToReturn2, int index)
+    {
+        if (indexToReturn1 == -1)
+        {
+            indexToReturn1 = index;
+        }
+        else
+        {
+            indexToReturn2 = index;
+        }
+    }
+
+    private void locateNeighbours(Tile[,] allGround, int x, int y, out int indexToReturn1, out int indexToReturn2)
+    {
+
+        indexToReturn1 = -1;
+        indexToReturn2 = -1;
+
+        if (x > 0)
+        {
+            if (allGround[x - 1, y] != Tile.eBlock)
+            {
+                indexToReturn1 = 0;
+            }
+        }
+        if (y < allGround.GetLength(1) - 1)
+        {
+            if (allGround[x, y + 1] != Tile.eBlock)
+            {
+                locateNeighboursSetIndexes(ref indexToReturn1, ref indexToReturn2, 1);
+            }
+        }
+        if (x < allGround.GetLength(0) - 1)
+        {
+            if (allGround[x + 1, y] != Tile.eBlock)
+            {
+                locateNeighboursSetIndexes(ref indexToReturn1, ref indexToReturn2, 2);
+            }
+        }
+        if (y > 0)
+        {
+            if (allGround[x, y - 1] != Tile.eBlock)
+            {
+                locateNeighboursSetIndexes(ref indexToReturn1, ref indexToReturn2, 3);
+            }
+        }
+
+
+    }
+
+    public ParticalTileMeta[,] TransformToParticalTile(Tile[,] groundBluePrint)
+    {
+        
+        int sizeX = groundBluePrint.GetLength(0);
+        int sizeY = groundBluePrint.GetLength(1);
+        ParticalTileMeta[,] toReturn = new ParticalTileMeta[sizeX + 2, sizeY + 2];
+
+        #region Create Corner
+        toReturn[0, 0] = new ParticalTileMeta(PracticalTile.eCorner, 180);
+        toReturn[0, sizeY + 1] = new ParticalTileMeta(PracticalTile.eCorner, 270);
+        toReturn[sizeX + 1, sizeY + 1] = new ParticalTileMeta(PracticalTile.eCorner, 0);
+        toReturn[sizeX + 1, 0] = new ParticalTileMeta(PracticalTile.eCorner, 90);
+        #endregion
+
+        #region Create Frame
+        for (int i = 0; i < sizeX; i++)
+        {
+            toReturn[0, i + 1] = new ParticalTileMeta(PracticalTile.eFrame, 270);
+            toReturn[sizeX + 1, i + 1] = new ParticalTileMeta(PracticalTile.eFrame, 90);
+        }
+
+        for (int i = 0; i < sizeY; i++)
+        {
+            toReturn[i + 1, 0] = new ParticalTileMeta(PracticalTile.eFrame, 180);
+            toReturn[i + 1, sizeY + 1] = new ParticalTileMeta(PracticalTile.eFrame, 0);
+        }
+        #endregion
+
+        #region Create Map
+
+        for (int i = 0; i < sizeX; i++)
+        {
+            for (int j = 0; j < sizeY; j++)
+            {
+                
+                Tile tile = groundBluePrint[i, j];
+                ParticalTileMeta meta = null;
+                
+                int walkSpace1;
+                int walkSpace2;
+                locateNeighbours(groundBluePrint, i, j, out walkSpace1, out walkSpace2);
+
+                #region Get Correct Tile and rotation
+                if (tile == Tile.eBlock)
+                {
+                    meta = new ParticalTileMeta(PracticalTile.eBlock);
+                }
+                else if (tile == Tile.eStart)
+                {
+                    meta = new ParticalTileMeta(PracticalTile.eStartingLocation, 90 * ((walkSpace1 + 1) % 4));
+                }
+                else if (tile == Tile.eEnd)
+                {
+                    meta = new ParticalTileMeta(PracticalTile.eEndLocation, 90 * ((walkSpace1 + 1) % 4));
+                }
+                else if (tile == Tile.eWalk)
+                {
+                    if (i > 0 && groundBluePrint[i - 1, j] == Tile.eWalk && groundBluePrint[i + 1, j] == Tile.eWalk)
+                    {
+                        meta = new ParticalTileMeta(PracticalTile.eWalking, 90);
+                    }
+                    else if (j > 0 && groundBluePrint[i, j - 1] == Tile.eWalk && groundBluePrint[i, j + 1] == Tile.eWalk)
+                    {
+                        meta = new ParticalTileMeta(PracticalTile.eWalking, 0);
+                    }
+                    else
+                    {
+
+                        if (walkSpace2 == 3 && walkSpace1 == 0)
+                            walkSpace2 = 0;
+                        meta = new ParticalTileMeta(PracticalTile.eWalkingCorner,  ((walkSpace2 + 1) % 4) * 90);
+                    }
+                }
+                #endregion
+
+                toReturn[i + 1, j + 1] = meta;
+
+            }
+        }
+
+        #endregion
+
+        return toReturn;
+
+    }
+
     public void CreateNew(Tile[,] groundBluePrint)
     {
 
         DestroyWorld();
-        CreateNewHelper(groundBluePrint);
+        ParticalTileMeta[,] bluePrint = TransformToParticalTile(groundBluePrint);
+        CreateNewHelper(bluePrint);
 
     }
 
-    private void CreateNewHelper(Tile[,] groundBluePrint)
+    private void CreateNewHelper(ParticalTileMeta[,] groundBluePrint)
     {
 
         int xSize = groundBluePrint.GetLength(0);
@@ -38,12 +175,14 @@ public class FloorCreator : MonoBehaviour
             for (int j = 0; j < ySize; j++)
             {
 
-                GameObject obj = FloorStorage.TileEnumToTileObject[groundBluePrint[i, j]];
+                GameObject obj = FloorStorage.TileEnumToTileObject[groundBluePrint[i, j].tileType];
                 Vector3 objSize = obj.transform.lossyScale;
 
                 GameObject tempObj = Instantiate(obj);
                 tempObj.transform.localScale = obj.transform.localScale * FloorCreationConfig.TileSize;
                 tempObj.transform.position = new Vector3(i * objSize.x, objSize.y, j * objSize.z) * 2 * FloorCreationConfig.TileSize;
+
+                tempObj.transform.Rotate(groundBluePrint[i, j].rotation);
 
                 TilesObjects[i, j] = tempObj;
 
