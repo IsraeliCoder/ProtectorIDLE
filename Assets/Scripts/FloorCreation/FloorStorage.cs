@@ -21,19 +21,19 @@ public enum PracticalTile
     eBlock
 }
 
-public class ParticalTileMeta
+public class PracticalTileMeta
 {
     
     public PracticalTile tileType;
     public Vector3 rotation;
 
-    public ParticalTileMeta(PracticalTile tileType, Vector3 rotation)
+    public PracticalTileMeta(PracticalTile tileType, Vector3 rotation)
     {
         this.tileType = tileType;
         this.rotation = rotation;
     }
 
-    public ParticalTileMeta(PracticalTile tileType, float y = 0) : this(tileType, new Vector3(0, y, 0))
+    public PracticalTileMeta(PracticalTile tileType, float y = 0) : this(tileType, new Vector3(0, y, 0))
     {
     }
 

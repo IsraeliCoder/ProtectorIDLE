@@ -68,31 +68,31 @@ public class FloorCreator : MonoBehaviour
 
     }
 
-    public ParticalTileMeta[,] TransformToParticalTile(Tile[,] groundBluePrint)
+    private PracticalTileMeta[,] TransformToPracticalTile(Tile[,] groundBluePrint)
     {
         
         int sizeX = groundBluePrint.GetLength(0);
         int sizeY = groundBluePrint.GetLength(1);
-        ParticalTileMeta[,] toReturn = new ParticalTileMeta[sizeX + 2, sizeY + 2];
+        PracticalTileMeta[,] toReturn = new PracticalTileMeta[sizeX + 2, sizeY + 2];
 
         #region Create Corner
-        toReturn[0, 0] = new ParticalTileMeta(PracticalTile.eCorner, 180);
-        toReturn[0, sizeY + 1] = new ParticalTileMeta(PracticalTile.eCorner, 270);
-        toReturn[sizeX + 1, sizeY + 1] = new ParticalTileMeta(PracticalTile.eCorner, 0);
-        toReturn[sizeX + 1, 0] = new ParticalTileMeta(PracticalTile.eCorner, 90);
+        toReturn[0, 0] = new PracticalTileMeta(PracticalTile.eCorner, 180);
+        toReturn[0, sizeY + 1] = new PracticalTileMeta(PracticalTile.eCorner, 270);
+        toReturn[sizeX + 1, sizeY + 1] = new PracticalTileMeta(PracticalTile.eCorner, 0);
+        toReturn[sizeX + 1, 0] = new PracticalTileMeta(PracticalTile.eCorner, 90);
         #endregion
 
         #region Create Frame
         for (int i = 0; i < sizeX; i++)
         {
-            toReturn[0, i + 1] = new ParticalTileMeta(PracticalTile.eFrame, 270);
-            toReturn[sizeX + 1, i + 1] = new ParticalTileMeta(PracticalTile.eFrame, 90);
+            toReturn[0, i + 1] = new PracticalTileMeta(PracticalTile.eFrame, 270);
+            toReturn[sizeX + 1, i + 1] = new PracticalTileMeta(PracticalTile.eFrame, 90);
         }
 
         for (int i = 0; i < sizeY; i++)
         {
-            toReturn[i + 1, 0] = new ParticalTileMeta(PracticalTile.eFrame, 180);
-            toReturn[i + 1, sizeY + 1] = new ParticalTileMeta(PracticalTile.eFrame, 0);
+            toReturn[i + 1, 0] = new PracticalTileMeta(PracticalTile.eFrame, 180);
+            toReturn[i + 1, sizeY + 1] = new PracticalTileMeta(PracticalTile.eFrame, 0);
         }
         #endregion
 
@@ -104,7 +104,7 @@ public class FloorCreator : MonoBehaviour
             {
                 
                 Tile tile = groundBluePrint[i, j];
-                ParticalTileMeta meta = null;
+                PracticalTileMeta meta = null;
                 
                 int walkSpace1;
                 int walkSpace2;
@@ -113,32 +113,32 @@ public class FloorCreator : MonoBehaviour
                 #region Get Correct Tile and rotation
                 if (tile == Tile.eBlock)
                 {
-                    meta = new ParticalTileMeta(PracticalTile.eBlock);
+                    meta = new PracticalTileMeta(PracticalTile.eBlock);
                 }
                 else if (tile == Tile.eStart)
                 {
-                    meta = new ParticalTileMeta(PracticalTile.eStartingLocation, 90 * ((walkSpace1 + 1) % 4));
+                    meta = new PracticalTileMeta(PracticalTile.eStartingLocation, 90 * ((walkSpace1 + 1) % 4));
                 }
                 else if (tile == Tile.eEnd)
                 {
-                    meta = new ParticalTileMeta(PracticalTile.eEndLocation, 90 * ((walkSpace1 + 1) % 4));
+                    meta = new PracticalTileMeta(PracticalTile.eEndLocation, 90 * ((walkSpace1 + 1) % 4));
                 }
                 else if (tile == Tile.eWalk)
                 {
                     if (i > 0 && groundBluePrint[i - 1, j] == Tile.eWalk && groundBluePrint[i + 1, j] == Tile.eWalk)
                     {
-                        meta = new ParticalTileMeta(PracticalTile.eWalking, 90);
+                        meta = new PracticalTileMeta(PracticalTile.eWalking, 90);
                     }
                     else if (j > 0 && groundBluePrint[i, j - 1] == Tile.eWalk && groundBluePrint[i, j + 1] == Tile.eWalk)
                     {
-                        meta = new ParticalTileMeta(PracticalTile.eWalking, 0);
+                        meta = new PracticalTileMeta(PracticalTile.eWalking, 0);
                     }
                     else
                     {
 
                         if (walkSpace2 == 3 && walkSpace1 == 0)
                             walkSpace2 = 0;
-                        meta = new ParticalTileMeta(PracticalTile.eWalkingCorner,  ((walkSpace2 + 1) % 4) * 90);
+                        meta = new PracticalTileMeta(PracticalTile.eWalkingCorner,  ((walkSpace2 + 1) % 4) * 90);
                     }
                 }
                 #endregion
@@ -158,12 +158,12 @@ public class FloorCreator : MonoBehaviour
     {
 
         DestroyWorld();
-        ParticalTileMeta[,] bluePrint = TransformToParticalTile(groundBluePrint);
+        PracticalTileMeta[,] bluePrint = TransformToPracticalTile(groundBluePrint);
         CreateNewHelper(bluePrint);
 
     }
 
-    private void CreateNewHelper(ParticalTileMeta[,] groundBluePrint)
+    private void CreateNewHelper(PracticalTileMeta[,] groundBluePrint)
     {
 
         int xSize = groundBluePrint.GetLength(0);
