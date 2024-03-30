@@ -5,12 +5,9 @@ using UnityEngine;
 public class FloorCreator : MonoBehaviour
 {
 
-    public GameObject[,] TilesObjects;
+    public static GameObject[,] TilesObjects;
     public List<GameObject> PropsInitiates;
     public PropsCreator PropsCreatorRef;
-
-    public float PropSize;
-
 
     public void Awake()
     {
@@ -185,6 +182,12 @@ public class FloorCreator : MonoBehaviour
                 tempObj.transform.Rotate(groundBluePrint[i, j].rotation);
 
                 TilesObjects[i, j] = tempObj;
+
+                if (groundBluePrint[i, j].tileType == PracticalTile.eStartingLocation)
+                {
+                    tempObj.AddComponent<EnemySpawner>().id = i * ySize + j;
+                }
+
 
             }
         }
