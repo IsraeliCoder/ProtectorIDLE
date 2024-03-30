@@ -64,7 +64,6 @@ public class PathManagment
         walkedInMap[i, j] = true;
 
         PathController toReturn = new PathController();
-
         CreateShortestPathControllerHelper(bluePrint, ref walkedInMap, toReturn, i, j, toFind);
 
         return toReturn;

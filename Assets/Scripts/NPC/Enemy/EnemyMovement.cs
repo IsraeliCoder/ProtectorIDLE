@@ -9,7 +9,6 @@ public class EnemyMovement : MonoBehaviour
     public Vector3 nextNode;
     private bool first = false;
 
-    // Update is called once per frame
     void FixedUpdate()
     {
 
@@ -19,6 +18,7 @@ public class EnemyMovement : MonoBehaviour
             if (!first)
             {
                 nextNode = pathController.GetNextNode();
+                transform.LookAt(nextNode);
                 first = true;
             }
 
@@ -31,10 +31,10 @@ public class EnemyMovement : MonoBehaviour
                 else
                 {
                     nextNode = pathController.GetNextNode();
+                    transform.LookAt(nextNode);
                 }
             }
 
-            transform.LookAt(nextNode);
 
         }
 

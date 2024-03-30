@@ -185,7 +185,8 @@ public class FloorCreator : MonoBehaviour
 
                 if (groundBluePrint[i, j].tileType == PracticalTile.eStartingLocation)
                 {
-                    tempObj.AddComponent<EnemySpawner>().id = i * ySize + j;
+                    EnemySpawner tempSpawner = tempObj.AddComponent<EnemySpawner>();
+                    tempSpawner.id = i * ySize + j;
                 }
 
 
