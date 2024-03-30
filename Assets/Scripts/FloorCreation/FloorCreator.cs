@@ -6,8 +6,8 @@ public class FloorCreator : MonoBehaviour
 {
 
     public GameObject[,] TilesObjects;
-    public GameObject[] Props;
-    public GameObject[] PropsInitiates;
+    public List<GameObject> PropsInitiates;
+    public PropsCreator PropsCreatorRef;
 
     public float PropSize;
 
@@ -211,19 +211,20 @@ public class FloorCreator : MonoBehaviour
         if (PropsInitiates != null)
         {
 
-            for (int i = 0; i < PropsInitiates.GetLength(0); i++)
+            for (int i = 0; i < PropsInitiates.Count; i++)
             {
                 Destroy(PropsInitiates[i]);
             }
 
             PropsInitiates = null;
+
         }
 
     }
 
-    public void GenerateProps()
-    { 
-    
+    public void GenerateProps(float propAppearChance)
+    {
+        PropsInitiates = PropsCreatorRef.AddProps(TilesObjects, propAppearChance);
     }
 
 }

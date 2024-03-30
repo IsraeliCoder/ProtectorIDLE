@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     {
         Tile[,] levelGround = FloorStorage.Levels[Level];
         FloorCreatorRef.CreateNew(levelGround);
-        FloorCreatorRef.GenerateProps();
+        FloorCreatorRef.GenerateProps(0.75f);
     }
 
     // Update is called once per frame
