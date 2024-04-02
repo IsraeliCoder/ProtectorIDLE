@@ -31,7 +31,8 @@ public class Number
     public Number Add(Number other)
     {
 
-        if (other.Power > Power)
+
+        if (other.BiggerOrEqual(this))
             return other.Add(this);
 
         if (Power > other.Power + 3)
@@ -81,17 +82,17 @@ public class Number
 
     }
 
-
     public Number Multiply(Number other)
     {
 
-        if (Power < other.Power)
+        if (BiggerOrEqual(other))
             return other.Multiply(this);
 
+        // 6.25 * 0.55
         int newPower = Power + other.Power;
         Number smallSmall = new Number(newPower, 0, SubNumber * other.SubNumber / 1000);
-        Number smallBig = new Number(newPower, SubNumber * other.MainNumber / 1000, SubNumber * other.MainNumber % 1000);
-        Number bigSmall = new Number(newPower, MainNumber * other.SubNumber / 1000, MainNumber * other.SubNumber % 1000);
+        Number smallBig = new Number(newPower, SubNumber * other.MainNumber / 1000, (SubNumber * other.MainNumber) % 1000);
+        Number bigSmall = new Number(newPower, MainNumber * other.SubNumber / 1000, (MainNumber * other.SubNumber) % 1000);
         Number bigBig = new Number(newPower, MainNumber * other.MainNumber, 0);
 
         Number toReturn = smallSmall.Add(smallBig).Add(bigSmall).Add(bigBig);
@@ -99,7 +100,7 @@ public class Number
         return toReturn;
     }
 
-    public bool Bigger(Number other)
+    public bool BiggerOrEqual(Number other)
     {
 
         if (Power == other.Power)
@@ -107,7 +108,7 @@ public class Number
             if (MainNumber == other.MainNumber)
             {
 
-                return SubNumber > other.SubNumber;
+                return SubNumber >= other.SubNumber;
 
             }
 
@@ -116,14 +117,13 @@ public class Number
 
         return Power > other.Power;
        
-
     }
 
     public Number Reduce(Number other)
     {
 
         // We are not supporting negative and never expecting it.
-        if (other.Bigger(this))
+        if (other.BiggerOrEqual(this))
             return this;
 
         Number toReturn;
@@ -167,6 +167,7 @@ public class Number
         while (small.Length < 3)
             small = "0" + small;
         return big + "." + (small.Substring(0, (big.Length < 3 ? 2 : 1)));
+
     }
 
     public string getString(NumberShowFormat format=NumberShowFormat.eMath)
@@ -180,7 +181,7 @@ public class Number
         }
         else
         {
-            return getRawNumberAsString() + MoneyExtension[Power / 3];
+            return getRawNumberAsString() + " " + MoneyExtension[Power / 3];
         }
 
     }
