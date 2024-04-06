@@ -108,7 +108,7 @@ public class Number
             if (MainNumber == other.MainNumber)
             {
 
-                return SubNumber >= other.SubNumber;
+                return SubNumber > other.SubNumber;
 
             }
 
