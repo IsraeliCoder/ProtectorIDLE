@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class RayCastChosenFloor : MonoBehaviour
 {
-    public Color colorToChange; // The color to change the objects to
-    public LayerMask layerMask; // The layer mask to filter which objects are affected by the raycast
     public float maxRaycastDistance; // Maximum distance of the raycast
-    [SerializeField]Camera cam;
-
-    public Color tempOriginRender;
-    public GameObject objPressed;
+    [SerializeField]private GameObject objPressed;
+    [SerializeField]private GameObject tempObj;
 
     void Update()
     {
@@ -19,33 +15,43 @@ public class RayCastChosenFloor : MonoBehaviour
         RaycastHit hit;
 
         // Perform the raycast
-        if (Physics.Raycast(ray, out hit, maxRaycastDistance, layerMask))
+        if (Physics.Raycast(ray, out hit, maxRaycastDistance))
         {
             if (Input.GetMouseButtonDown(0))
             {
                 objPressed = hit.collider.gameObject;
-                tempOriginRender = hit.collider.GetComponent<Renderer>().material.color;
+
+                if (tempObj == null)
+                    tempObj = objPressed;
 
                 // Check if the hit object has the specified tag
                 if (hit.collider.CompareTag("TileCube"))
                 {
-                    // Change the color of the hit object
-                    Renderer renderer = hit.collider.GetComponent<Renderer>();
-                    if (renderer != null)
+                    if(tempObj != objPressed)
                     {
-                        renderer.material.color = colorToChange;
+                        for (int i = 0; i < tempObj.transform.childCount; i++)
+                        {
+                            GameObject child = tempObj.transform.GetChild(i).gameObject;
+                            child.SetActive(false);
+                        }
+
+                        tempObj = objPressed;
                     }
-                }
-            }
-            else if (Input.GetMouseButtonUp(0) && tempOriginRender != null && objPressed != null)
-            {
-                if (hit.collider.CompareTag("TileCube"))
-                {
-                    // Change the color of the hit object
-                    Renderer renderer = objPressed.GetComponent<Renderer>();
-                    if (renderer != null)
+
+                    // Get the children of the clicked object
+                    for (int i = 0; i < objPressed.transform.childCount; i++)
                     {
-                        renderer.material.color = tempOriginRender;
+                        GameObject child = objPressed.transform.GetChild(i).gameObject;
+
+                        if(!child.activeSelf)
+                        {
+                            // Set the child object's active state
+                            child.SetActive(true);
+                        }
+                        else if(child.activeSelf)
+                        {
+                            child.SetActive(false);
+                        }
                     }
                 }
             }
