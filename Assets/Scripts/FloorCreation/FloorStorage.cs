@@ -7,7 +7,13 @@ public enum Tile
     eStart,
     eWalk,
     eBlock,
-    eEnd
+    eBlockNoProp,
+    eEnd,
+    eHeroAttackOne,
+    eHeroBuff,
+    eHeroAttackAll,
+    eNone
+
 }
 
 public enum PracticalTile
@@ -18,7 +24,7 @@ public enum PracticalTile
     eEndLocation,
     eWalking,
     eWalkingCorner,
-    eBlock
+    eBlock,
 }
 
 public class PracticalTileMeta
@@ -64,8 +70,8 @@ public class FloorStorage : MonoBehaviour
 
     public static Tile[,] FirstLevel = { 
         { Tile.eBlock, Tile.eBlock, Tile.eBlock, Tile.eBlock, Tile.eBlock  },
-        { Tile.eStart, Tile.eWalk,  Tile.eBlock, Tile.eWalk, Tile.eEnd     },
-        { Tile.eBlock, Tile.eWalk,  Tile.eBlock, Tile.eWalk, Tile.eBlock   },
+        { Tile.eStart, Tile.eWalk,  Tile.eBlockNoProp, Tile.eWalk, Tile.eEnd     },
+        { Tile.eBlock, Tile.eWalk,  Tile.eHeroAttackOne, Tile.eWalk, Tile.eBlockNoProp   },
         { Tile.eBlock, Tile.eWalk,  Tile.eWalk,  Tile.eWalk, Tile.eBlock   },
         { Tile.eBlock, Tile.eBlock, Tile.eBlock, Tile.eBlock, Tile.eBlock  },
     };

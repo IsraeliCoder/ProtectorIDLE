@@ -27,6 +27,16 @@ public class FloorCreator : MonoBehaviour
         }
     }
 
+    bool TileIsBlocker(Tile tile)
+    {
+        return tile == Tile.eBlock || 
+            tile == Tile.eBlockNoProp || 
+            tile == Tile.eHeroAttackAll || 
+            tile == Tile.eHeroAttackOne || 
+            tile == Tile.eHeroBuff;
+    }
+    
+
     private void locateNeighbours(Tile[,] allGround, int x, int y, out int indexToReturn1, out int indexToReturn2)
     {
 
@@ -35,28 +45,28 @@ public class FloorCreator : MonoBehaviour
 
         if (x > 0)
         {
-            if (allGround[x - 1, y] != Tile.eBlock)
+            if (!TileIsBlocker(allGround[x - 1, y]))
             {
                 indexToReturn1 = 0;
             }
         }
         if (y < allGround.GetLength(1) - 1)
         {
-            if (allGround[x, y + 1] != Tile.eBlock)
+            if (!TileIsBlocker(allGround[x, y + 1]))
             {
                 locateNeighboursSetIndexes(ref indexToReturn1, ref indexToReturn2, 1);
             }
         }
         if (x < allGround.GetLength(0) - 1)
         {
-            if (allGround[x + 1, y] != Tile.eBlock)
+            if (!TileIsBlocker(allGround[x + 1, y]))
             {
                 locateNeighboursSetIndexes(ref indexToReturn1, ref indexToReturn2, 2);
             }
         }
         if (y > 0)
         {
-            if (allGround[x, y - 1] != Tile.eBlock)
+            if (!TileIsBlocker(allGround[x, y - 1]))
             {
                 locateNeighboursSetIndexes(ref indexToReturn1, ref indexToReturn2, 3);
             }
@@ -108,7 +118,11 @@ public class FloorCreator : MonoBehaviour
                 locateNeighbours(groundBluePrint, i, j, out walkSpace1, out walkSpace2);
 
                 #region Get Correct Tile and rotation
-                if (tile == Tile.eBlock)
+                if (tile == Tile.eBlock || 
+                    tile == Tile.eBlockNoProp || 
+                    tile == Tile.eHeroAttackOne || 
+                    tile == Tile.eHeroAttackAll || 
+                    tile == Tile.eHeroBuff)
                 {
                     meta = new PracticalTileMeta(PracticalTile.eBlock);
                 }
@@ -187,6 +201,10 @@ public class FloorCreator : MonoBehaviour
                 {
                     EnemySpawner tempSpawner = tempObj.AddComponent<EnemySpawner>();
                     tempSpawner.id = i * ySize + j;
+                }
+                else if (groundBluePrint[i, j].tileType == PracticalTile.eEndLocation)
+                {
+                    ExitBlock tempSpawner = tempObj.AddComponent<ExitBlock>();
                 }
 
 

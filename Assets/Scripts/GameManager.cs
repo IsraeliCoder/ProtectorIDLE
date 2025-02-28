@@ -28,12 +28,12 @@ public class GameManager : MonoBehaviour
 
         CurrentBluePrint = FloorStorage.Levels[Level];
         FloorCreatorRef.CreateNew(CurrentBluePrint);
-        FloorCreatorRef.GenerateProps(0.75f);
+        FloorCreatorRef.GenerateProps(0.55f);
 
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         
     }

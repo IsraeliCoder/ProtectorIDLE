@@ -15,9 +15,17 @@ public class EnemySpawner : MonoBehaviour
 
     public void Start()
     {
-        EnemyToSpawn = new GameObject[0];
+        PropsCreator propCreator = FindObjectOfType<PropsCreator>();
+        EnemyToSpawn = new GameObject[propCreator.Enemies.Length];
+        for (int i = 0; i < propCreator.Enemies.Length; i++)
+            EnemyToSpawn[i] = propCreator.Enemies[i];
+
+
         SpawnInterval = new float[EnemyToSpawn.Length];
-        RunningTimes = new float[SpawnInterval.Length];
+        SpawnInterval[0] = 5;
+
+        RunningTimes = new float[1];
+        RunningTimes[0] = 5;
         pathManagment = new PathManagment();
     }
 
@@ -36,6 +44,8 @@ public class EnemySpawner : MonoBehaviour
 
                 EnemyMovement enemyMovement = enemy.AddComponent<EnemyMovement>();
                 enemyMovement.pathController = pathManagment.GeneratePathController(GameManager.CurrentBluePrint);
+
+                enemy.AddComponent<EnemyParam>();
 
                 RunningTimes[i] = 0;
 
