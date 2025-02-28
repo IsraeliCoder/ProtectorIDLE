@@ -57,7 +57,10 @@ public class PropsCreator : MonoBehaviour
                     );
 
                     if (tile == Tile.eHeroAttackOne)
-                        obj.AddComponent<AttackOnce>();
+                    {
+                        AttackOnce atkOnce = obj.AddComponent<AttackOnce>();
+                        atkOnce.SetAtkMetaData(GetComponent<HeroStorage>());
+                    }
 
                     obj.transform.position = backgroundObjects[i, j].transform.position + Vector3.up;
                     obj.transform.Rotate(new Vector3(0, 90, 0));

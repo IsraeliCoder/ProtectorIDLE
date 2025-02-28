@@ -8,6 +8,10 @@ public class EnemyMovement : MonoBehaviour
     public PathController pathController = null;
     public Vector3 nextNode;
     private bool first = false;
+    public StatsManager statsManager;
+    public EnemyStorage enemyStorage;
+
+
 
     void FixedUpdate()
     {
@@ -27,7 +31,10 @@ public class EnemyMovement : MonoBehaviour
             if ((nextNode - transform.position).magnitude < 0.2)
             {
                 if (pathController.EndOfTheRoad())
+                {
                     Destroy(gameObject);
+                    statsManager.addMoney(new Number(0, enemyStorage.value * -enemyStorage.missedValueMultiplier, 0));
+                }
                 else
                 {
                     nextNode = pathController.GetNextNode();

@@ -5,8 +5,17 @@ using UnityEngine;
 public class EnemyParam : MonoBehaviour
 {
 
-    public float hp=1;
+    public float hp;
     public bool killed = false;
+    public StatsManager statsManager;
+    public EnemyStorage enemyStorage;
+
+    public void SetData(EnemyStorage storage, StatsManager statsManager)
+    {
+        hp = storage.Hp;
+        this.statsManager = statsManager;        
+    }
+
 
 
     public void FixedUpdate()
@@ -15,6 +24,7 @@ public class EnemyParam : MonoBehaviour
         {
             killed = true;
             Destroy(gameObject);
+            statsManager.addMoney(new Number(0, enemyStorage.value, 0));
         }
     }
 

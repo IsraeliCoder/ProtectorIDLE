@@ -200,6 +200,8 @@ public class FloorCreator : MonoBehaviour
                 if (groundBluePrint[i, j].tileType == PracticalTile.eStartingLocation)
                 {
                     EnemySpawner tempSpawner = tempObj.AddComponent<EnemySpawner>();
+                    tempSpawner.enemyStorage = GetComponent<EnemyStorage>();
+                    tempSpawner.statsManager = GetComponent<StatsManager>();
                     tempSpawner.id = i * ySize + j;
                 }
                 else if (groundBluePrint[i, j].tileType == PracticalTile.eEndLocation)

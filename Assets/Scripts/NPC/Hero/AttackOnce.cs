@@ -5,16 +5,25 @@ using UnityEngine;
 public class AttackOnce : MonoBehaviour
 {
 
-    public float radius = 4f;
+    public float radius;
 
     public float runningTimeForAttack = 0;
-    public float TimeForAttack = 3;
+    public float TimeForAttack;
     public float runningTimeForFinding = 0;
-    public float TimeForFinding = 0.5f;
+    public float TimeForFinding;
 
     public GameObject EnemyToAttack = null;
     public GameObject ExitTile = null;
     public Animator animator;
+    public HeroStorage heroStorage;
+
+    public void SetAtkMetaData(HeroStorage storage)
+    {
+        radius = storage.radius;
+        TimeForAttack = storage.timeToAtk;
+        TimeForFinding = storage.timeToFind;
+        heroStorage = storage;
+    }
 
     public void OnMouseUp()
     {
@@ -38,6 +47,7 @@ public class AttackOnce : MonoBehaviour
         {
             EnemyMovement target = null;
             float smallestDistance = 1000;
+            // Takes a lot of time
             EnemyMovement[] objects = FindObjectsOfType<EnemyMovement>();
 
             foreach (EnemyMovement enemy in objects)
@@ -62,7 +72,7 @@ public class AttackOnce : MonoBehaviour
             {
                 animator.SetBool("Attack",true);
                 AttackEffect tempAtk = gameObject.AddComponent<AttackEffect>();
-                tempAtk.StartHelper(EnemyToAttack);
+                tempAtk.SetEnemy(EnemyToAttack, heroStorage);
                 EnemyToAttack = null;
             }
             runningTimeForAttack = 0;

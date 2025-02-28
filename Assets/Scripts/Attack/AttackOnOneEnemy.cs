@@ -9,7 +9,7 @@ public class AttackOnOneEnemy : MonoBehaviour
     public GameObject enemy;
     public EnemyParam enemyParam;
     public float length;
-    public float power = 1;
+    public float power;
     public bool onEnemy = false;
     public bool onHero = false;
     public float timeToAttack;
@@ -19,7 +19,7 @@ public class AttackOnOneEnemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        enemyParam = enemy.GetComponent<EnemyParam>();
+        enemyParam = FindObjectOfType<EnemyParam>();
         timeToAttack -= Time.fixedDeltaTime * 4;
     }
 
